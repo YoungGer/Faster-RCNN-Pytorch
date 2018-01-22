@@ -5,6 +5,19 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader
 import random
 import cv2
+import pickle
+
+# ----------------------------------------------------------------
+# LOAD AND SAVE USING PICKLE
+def save_pkl(filename, f):
+    with open(filename, 'wb') as handle:
+        pickle.dump(f, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+def load_pkl(filename):
+    with open(filename, 'rb') as handle:
+        b = pickle.load(handle)
+        return b
+
 
 # ----------------------------------------------------------------
 # VOC Objection Datasets
