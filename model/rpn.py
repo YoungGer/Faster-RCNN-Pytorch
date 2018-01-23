@@ -32,7 +32,7 @@ class RegionProposalNetwork(nn.Module):
 
     def __init__(
             self, in_channels=512, mid_channels=512, ratios=[0.5, 1, 2],
-            scales=[8, 16, 32], feat_stride=16
+            scales=[0.5, 1, 2], feat_stride=16
     ):
         super(RegionProposalNetwork, self).__init__()
         # prepare anchor base
@@ -104,10 +104,10 @@ class RegionProposalNetwork(nn.Module):
         # rpn_locs, rpn_scores
         rpn_locs = rpn_locs.permute(0, 2, 3, 1).contiguous().view(n, -1, 4)
         rpn_scores = rpn_scores.permute(0, 2, 3, 1).contiguous().view(n, -1, 2)
-        scores = rpn_scores[:,:,1].data.numpy()[0]
+        scores = rpn_scores[:,:,1].data.cpu().numpy()[0]
         
         # get rois, roi_indices
-        rois = get_rois_from_loc_anchors(anchors, rpn_locs[0].data.numpy())
+        rois = get_rois_from_loc_anchors(anchors, rpn_locs[0].data.cpu().numpy())
         ## clip
         rois[:, ::2] = np.clip(rois[:, ::2], 0, img_size[0])
         rois[:, 1::2] = np.clip(rois[:, 1::2], 0, img_size[1])
